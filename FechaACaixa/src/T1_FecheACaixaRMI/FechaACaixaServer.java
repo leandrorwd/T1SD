@@ -3,7 +3,7 @@ package T1_FecheACaixaRMI;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 
-public class FechaACasaServer {
+public class FechaACaixaServer {
 	public static void main(String[] args) {
 		try {
 			java.rmi.registry.LocateRegistry.createRegistry(1099);
