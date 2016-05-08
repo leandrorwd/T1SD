@@ -4,7 +4,13 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaInterface{
-
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	String nomeJogador;
+	
 	protected FecheACaixaImpl() throws RemoteException {
 		super();
 		// TODO Auto-generated constructor stub
@@ -19,6 +25,8 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	@Override
 	public int registraJogador(String nome) throws RemoteException {
 		// TODO Auto-generated method stub
+		nomeJogador = nome;
+		
 		return 0;
 	}
 
@@ -83,7 +91,4 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
-	
-
 }
