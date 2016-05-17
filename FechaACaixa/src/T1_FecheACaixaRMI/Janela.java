@@ -5,8 +5,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import java.awt.Font;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -14,7 +16,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.MalformedURLException;
-import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Random;
@@ -25,17 +26,19 @@ import java.awt.Color;
 
 @SuppressWarnings("serial")
 public class Janela extends JPanel {
-	private JTextField campoNomeJogador;
+
 	static int somaselecionados = 0, dados = 2;
-	boolean[] botoesSelec = new boolean[9];
-	public JTextField somaselec;
+	// boolean[] botoesSelec = new boolean[9];
+	public JTextField somaSelecionados;
 	private JTextField dado1;
 	private JTextField dado2;
 	static Random gerador = new Random();
+	private JTextField campoNomeJogador;
 	static FechaACaixaClient client;
 
-	public static void main(String args[]) throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, UnsupportedLookAndFeelException, MalformedURLException, RemoteException, NotBoundException {
+	public static void main(String args[])
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException,
+			UnsupportedLookAndFeelException, MalformedURLException, RemoteException, NotBoundException {
 
 		for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 			if ("Windows".equals(info.getName())) {
@@ -47,10 +50,11 @@ public class Janela extends JPanel {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Janela gui = new Janela();
+				gui.somaSelecionados.setText("0");
 				show(gui);
 			}
 		});
-//		client = new FechaACaixaClient(); 
+		client = new FechaACaixaClient();
 	}
 
 	private static void show(Janela ui) {
@@ -78,15 +82,18 @@ public class Janela extends JPanel {
 		add(lblFechaACaixa);
 
 		campoNomeJogador = new JTextField();
-		campoNomeJogador.setBounds(137, 80, 184, 20);
+		campoNomeJogador.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		campoNomeJogador.setBounds(207, 73, 253, 31);
 		add(campoNomeJogador);
 		campoNomeJogador.setColumns(10);
 
 		JLabel lblNomeJogador = new JLabel("Nome do Jogador");
-		lblNomeJogador.setBounds(45, 83, 90, 14);
+		lblNomeJogador.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblNomeJogador.setBounds(45, 76, 167, 24);
 		add(lblNomeJogador);
 
 		JButton btnOk = new JButton("Ok");
+		btnOk.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnOk.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -102,7 +109,7 @@ public class Janela extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnOk.setBounds(331, 79, 66, 23);
+		btnOk.setBounds(468, 72, 72, 31);
 		add(btnOk);
 
 		JButton botao1 = new JButton("1");
@@ -114,8 +121,13 @@ public class Janela extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao1.isEnabled()) {
-//					botao1 = client.numeroClicado(botao1, 1);
-					somaselec.setText(client.getSomaSelecionados());
+					if (botao1.getForeground() == Color.red) {
+						botao1.setForeground(Color.black);
+						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(1)));
+					} else {
+						botao1.setForeground(Color.red);
+						somaSelecionados.setText(Integer.toString(client.casaSelecionada(1)));
+					}
 				}
 			}
 		});
@@ -130,14 +142,10 @@ public class Janela extends JPanel {
 				if (botao2.isEnabled()) {
 					if (botao2.getForeground() == Color.red) {
 						botao2.setForeground(Color.black);
-						somaselecionados -= 2;
-						somaselec.setText(Integer.toString(somaselecionados));
-						botoesSelec[1] = false;
+						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(2)));
 					} else {
 						botao2.setForeground(Color.red);
-						somaselecionados += 2;
-						somaselec.setText(Integer.toString(somaselecionados));
-						botoesSelec[1] = true;
+						somaSelecionados.setText(Integer.toString(client.casaSelecionada(2)));
 					}
 				}
 			}
@@ -151,16 +159,14 @@ public class Janela extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao3.isEnabled()) {
-					if (botao3.getForeground() == Color.red) {
-						botao3.setForeground(Color.black);
-						somaselecionados -= 3;
-						somaselec.setText(Integer.toString(somaselecionados));
-						botoesSelec[2] = false;
-					} else {
-						botao3.setForeground(Color.red);
-						somaselecionados += 3;
-						somaselec.setText(Integer.toString(somaselecionados));
-						botoesSelec[2] = true;
+					if (botao3.isEnabled()) {
+						if (botao3.getForeground() == Color.red) {
+							botao3.setForeground(Color.black);
+							somaSelecionados.setText(Integer.toString(client.casaDeselecionada(3)));
+						} else {
+							botao3.setForeground(Color.red);
+							somaSelecionados.setText(Integer.toString(client.casaSelecionada(3)));
+						}
 					}
 				}
 			}
@@ -173,10 +179,14 @@ public class Janela extends JPanel {
 		botao4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (botao4.getForeground() == Color.red) {
-					botao4.setForeground(Color.black);
-				} else {
-					botao4.setForeground(Color.red);
+				if (botao4.isEnabled()) {
+					if (botao4.getForeground() == Color.red) {
+						botao4.setForeground(Color.black);
+						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(4)));
+					} else {
+						botao4.setForeground(Color.red);
+						somaSelecionados.setText(Integer.toString(client.casaSelecionada(4)));
+					}
 				}
 			}
 		});
@@ -188,10 +198,14 @@ public class Janela extends JPanel {
 		botao5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (botao5.getForeground() == Color.red) {
-					botao5.setForeground(Color.black);
-				} else {
-					botao5.setForeground(Color.red);
+				if (botao5.isEnabled()) {
+					if (botao5.getForeground() == Color.red) {
+						botao5.setForeground(Color.black);
+						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(5)));
+					} else {
+						botao5.setForeground(Color.red);
+						somaSelecionados.setText(Integer.toString(client.casaSelecionada(5)));
+					}
 				}
 			}
 		});
@@ -203,10 +217,14 @@ public class Janela extends JPanel {
 		botao6.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (botao6.getForeground() == Color.red) {
-					botao6.setForeground(Color.black);
-				} else {
-					botao6.setForeground(Color.red);
+				if (botao6.isEnabled()) {
+					if (botao6.getForeground() == Color.red) {
+						botao6.setForeground(Color.black);
+						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(6)));
+					} else {
+						botao6.setForeground(Color.red);
+						somaSelecionados.setText(Integer.toString(client.casaSelecionada(6)));
+					}
 				}
 			}
 		});
@@ -218,10 +236,14 @@ public class Janela extends JPanel {
 		botao7.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (botao7.getForeground() == Color.red) {
-					botao7.setForeground(Color.black);
-				} else {
-					botao7.setForeground(Color.red);
+				if (botao7.isEnabled()) {
+					if (botao7.getForeground() == Color.red) {
+						botao7.setForeground(Color.black);
+						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(7)));
+					} else {
+						botao7.setForeground(Color.red);
+						somaSelecionados.setText(Integer.toString(client.casaSelecionada(7)));
+					}
 				}
 			}
 		});
@@ -233,96 +255,208 @@ public class Janela extends JPanel {
 		botao8.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (botao8.getForeground() == Color.red) {
-					botao8.setForeground(Color.black);
-				} else {
-					botao8.setForeground(Color.red);
+				if (botao8.isEnabled()) {
+					if (botao8.getForeground() == Color.red) {
+						botao8.setForeground(Color.black);
+						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(8)));
+					} else {
+						botao8.setForeground(Color.red);
+						somaSelecionados.setText(Integer.toString(client.casaSelecionada(8)));
+					}
 				}
 			}
 		});
 
 		JButton botao9 = new JButton("9");
+		botao9.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (botao9.isEnabled()) {
+					if (botao9.getForeground() == Color.red) {
+						botao9.setForeground(Color.black);
+						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(9)));
+					} else {
+						botao9.setForeground(Color.red);
+						somaSelecionados.setText(Integer.toString(client.casaSelecionada(9)));
+					}
+				}
+			}
+		});
 		botao9.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		botao9.setBounds(529, 124, 55, 93);
 		add(botao9);
-		
+
 		JLabel lblTotalSelecionado = new JLabel("Total selecionado:");
-		lblTotalSelecionado.setBounds(48, 241, 90, 14);
+		lblTotalSelecionado.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblTotalSelecionado.setBounds(48, 241, 179, 21);
 		add(lblTotalSelecionado);
 
-		somaselec = new JTextField();
-		somaselec.setHorizontalAlignment(SwingConstants.CENTER);
-		somaselec.setBounds(137, 238, 55, 20);
-		add(somaselec);
-		somaselec.setColumns(10);
+		somaSelecionados = new JTextField();
+		somaSelecionados.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		somaSelecionados.setHorizontalAlignment(SwingConstants.CENTER);
+		somaSelecionados.setBounds(225, 237, 55, 31);
+		add(somaSelecionados);
+		somaSelecionados.setColumns(10);
 
 		JButton btnConfirmarJogada = new JButton("Confirmar Jogada");
+		btnConfirmarJogada.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnConfirmarJogada.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				for (int i = 0; i < 9; i++) {
-					if (botoesSelec[i]) {
-						switch (i) {
-						case 0:
-							botao1.setEnabled(false);
+				boolean response = false;
+				boolean[] desabilita = new boolean[9];
+				try {
+					response = client.enviaJogada();
+					if (response) {
+						desabilita = client.getCasas();
+						if (desabilita[0] == true) {
+							client.casaDeselecionada(0);
 							botao1.setForeground(Color.black);
-							
-							break;
-						case 1:
-							botao2.setEnabled(false);
-							botao2.setForeground(Color.black);
-							break;
-						case 2:
-							botao3.setEnabled(false);
-							botao3.setForeground(Color.black);
-							break;
+							botao1.setEnabled(false);
 						}
+						if (desabilita[1] == true) {
+							client.casaDeselecionada(1);
+							botao2.setForeground(Color.black);
+							botao2.setEnabled(false);
+						}
+						if (desabilita[2] == true) {
+							client.casaDeselecionada(2);
+							botao3.setForeground(Color.black);
+							botao3.setEnabled(false);
+						}
+						if (desabilita[3] == true) {
+							client.casaDeselecionada(3);
+							botao4.setForeground(Color.black);
+							botao4.setEnabled(false);
+						}
+						if (desabilita[4] == true) {
+							client.casaDeselecionada(4);
+							botao5.setForeground(Color.black);
+							botao5.setEnabled(false);
+						}
+						if (desabilita[5] == true) {
+							client.casaDeselecionada(5);
+							botao6.setForeground(Color.black);
+							botao6.setEnabled(false);
+						}
+						if (desabilita[6] == true) {
+							client.casaDeselecionada(6);
+							botao7.setForeground(Color.black);
+							botao7.setEnabled(false);
+						}
+						if (desabilita[7] == true) {
+							client.casaDeselecionada(7);
+							botao8.setForeground(Color.black);
+							botao8.setEnabled(false);
+						}
+						if (desabilita[8] == true) {
+							client.casaDeselecionada(8);
+							botao9.setForeground(Color.black);
+							botao9.setEnabled(false);
+						}
+						somaSelecionados.setText(Integer.toString(client.somaSelecionados));
+						JOptionPane.showConfirmDialog(null, "Jogada correta.", "Confirmação",
+								JOptionPane.DEFAULT_OPTION);
+					} else {
+						botao1.setForeground(Color.BLACK);
+						botao2.setForeground(Color.BLACK);
+						botao3.setForeground(Color.BLACK);
+						botao4.setForeground(Color.BLACK);
+						botao5.setForeground(Color.BLACK);
+						botao6.setForeground(Color.BLACK);
+						botao7.setForeground(Color.BLACK);
+						botao8.setForeground(Color.BLACK);
+						botao9.setForeground(Color.BLACK);
+						for (int i = 0; i < 9; i++) {
+							client.casaDeselecionada(i + 1);
+						}
+						JOptionPane.showConfirmDialog(null, "Jogada incorreta.", "Confirmação",
+								JOptionPane.DEFAULT_OPTION);
 					}
+				} catch (RemoteException e2) {
+					// TODO Auto-generated catch block
+					JOptionPane.showConfirmDialog(null, "Ocorreu um erro na comunicação. Tente novamente.", "ERRO",
+							JOptionPane.DEFAULT_OPTION);
+					e2.printStackTrace();
 				}
-				somaselecionados = 0;
-				somaselec.setText(Integer.toString(somaselecionados));
 			}
 		});
-		btnConfirmarJogada.setBounds(437, 232, 120, 23);
+		btnConfirmarJogada.setBounds(382, 232, 189, 67);
 		add(btnConfirmarJogada);
-		
+
 		dado1 = new JTextField();
 		dado1.setHorizontalAlignment(SwingConstants.CENTER);
 		dado1.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		dado1.setBounds(44, 329, 86, 67);
+		dado1.setBounds(32, 329, 86, 67);
 		add(dado1);
 		dado1.setColumns(10);
-		
+
 		JLabel lblDado = new JLabel("Dado 1");
-		lblDado.setBounds(66, 304, 46, 14);
+		lblDado.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblDado.setBounds(43, 296, 72, 23);
 		add(lblDado);
-		
+
 		JLabel lblDado_1 = new JLabel("Dado 2");
-		lblDado_1.setBounds(166, 304, 46, 14);
+		lblDado_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblDado_1.setBounds(145, 296, 70, 22);
 		add(lblDado_1);
-		
+
 		dado2 = new JTextField();
 		dado2.setHorizontalAlignment(SwingConstants.CENTER);
 		dado2.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		dado2.setColumns(10);
-		dado2.setBounds(146, 329, 86, 67);
+		dado2.setBounds(134, 329, 86, 67);
 		add(dado2);
-		
+
 		JButton btnJogarDados = new JButton("Jogar dados");
 		btnJogarDados.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (dados == 2) {
-					dado1.setText(Integer.toString(gerador.nextInt(6)+1));
-					dado2.setText(Integer.toString(gerador.nextInt(6)+1));
-				} if (dados == 1) {
-					dado1.setText(Integer.toString(gerador.nextInt(6)));
-					dado2.setText(" ");
+				int[] dados = new int[2];
+				try {
+					dados = client.jogaDados();
+					dado1.setText(Integer.toString(dados[0]));
+					dado2.setText(Integer.toString(dados[1]));
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
+				
+//				if (dados == 2) {
+//					dado1.setText(Integer.toString(gerador.nextInt(6) + 1));
+//					dado2.setText(Integer.toString(gerador.nextInt(6) + 1));
+//				}
+//				if (dados == 1) {
+//					dado1.setText(Integer.toString(gerador.nextInt(6)));
+//					dado2.setText(" ");
+//				}
 			}
 		});
 		btnJogarDados.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnJogarDados.setBounds(269, 329, 139, 67);
 		add(btnJogarDados);
+		
+		JButton btn_desistir = new JButton("Desistir");
+		btn_desistir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int answer = JOptionPane.showConfirmDialog(null, "Confirmas o cancelamento da partida?", "Confirmação",
+						JOptionPane.YES_NO_OPTION);
+				if (answer == 0) {
+					try {
+						if(client.cancelaPartida() ==  1) {
+							JOptionPane.showConfirmDialog(null, "Partida cancelada com sucesso!", "Cancelada",
+									JOptionPane.DEFAULT_OPTION);
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		btn_desistir.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btn_desistir.setBounds(432, 329, 139, 67);
+		add(btn_desistir);
 	}
 }

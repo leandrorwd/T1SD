@@ -1,35 +1,36 @@
 package T1_FecheACaixaRMI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
 public class FechaACaixaClient {
 	int codigoJogador;
 	String nomeJogador;
 	int somaSelecionados;
-	
+
 	// 0 livre
 	// 1 clicado aguardando jogada
 	// -1 desativado
-	int[] numeros;
+	boolean[] casas = { false, false, false, false, false, false, false, false, false};
+
+	public boolean[] getCasas() {
+		return casas;
+	}
+
+	public void setCasas(boolean[] casas) {
+		this.casas = casas;
+	}
 
 	FecheACaixaInterface fac;
-	
+
 	public FechaACaixaClient() throws MalformedURLException, RemoteException, NotBoundException {
 		somaSelecionados = 0;
-		numeros = new int[9];
+		casas = new boolean[9];
 		try {
 			fac = (FecheACaixaInterface) Naming.lookup("//localhost/Fecha");
 		} catch (Exception e) {
-			// TODO: handle exception
 			System.out.println("Erro TF.");
 		}
 	}
@@ -59,18 +60,29 @@ public class FechaACaixaClient {
 		this.somaSelecionados = somaSelecionados;
 	}
 
-	public JButton numeroClicado(JButton botao, int pos) {
-		if (botao.isEnabled()) {
-			numeros[pos - 1] = true;
-			if (botao.getForeground() == Color.red) {
-				botao.setForeground(Color.black);
-				somaSelecionados -= 1;
-			} else {
-				botao.setForeground(Color.red);
-				somaSelecionados += 1;
-			}
-		}
-		return botao;
+	public int casaSelecionada(int pos) {
+		somaSelecionados += pos;
+		casas[pos - 1] = true;
+		return somaSelecionados;
 	}
 
+	public int casaDeselecionada(int pos) {
+		somaSelecionados -= pos;
+		casas[pos - 1] = false;
+		return somaSelecionados;
+	}
+	
+	public boolean enviaJogada() throws RemoteException {
+		somaSelecionados = 0;
+		return fac.selecionaCasas(codigoJogador, casas);
+	}
+	
+	public int cancelaPartida() throws RemoteException {
+		return fac.encerraPartida(codigoJogador);
+	}
+
+	public int[] jogaDados() throws RemoteException{
+		return fac.jogaDados(codigoJogador);
+	}
+	
 }

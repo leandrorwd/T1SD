@@ -9,5 +9,7 @@ public interface FecheACaixaInterface extends Remote{
 	public int obtemTabuleiro (int id) throws RemoteException;
 	public int obtemPontuacao (int id) throws RemoteException;
 	public int[] jogaDados (int id) throws RemoteException;
-	public int selecionaCasas (int id, boolean[] casas) throws RemoteException;
+	
+	// Envia as casas selecionadas para verificar se a jogada é válida ou não.
+	public boolean selecionaCasas (int id, boolean[] casas) throws RemoteException;
 }
