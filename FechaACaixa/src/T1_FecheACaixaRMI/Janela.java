@@ -19,27 +19,26 @@ import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Random;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
 @SuppressWarnings("serial")
 public class Janela extends JPanel {
-
+	static JFrame frame;
 	static int somaselecionados = 0, dados = 2;
 	// boolean[] botoesSelec = new boolean[9];
 	public JTextField somaSelecionados;
 	private JTextField dado1;
 	private JTextField dado2;
 	static Random gerador = new Random();
-	private JTextField campoNomeJogador;
 	static FechaACaixaClient client;
 
 	public static void main(String args[])
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException,
 			UnsupportedLookAndFeelException, MalformedURLException, RemoteException, NotBoundException {
-
+		
+		client = new FechaACaixaClient();
+		
 		for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 			if ("Windows".equals(info.getName())) {
 				javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -49,16 +48,30 @@ public class Janela extends JPanel {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				Object result;
 				Janela gui = new Janela();
 				gui.somaSelecionados.setText("0");
 				show(gui);
+				JanelaAux gui2 = new JanelaAux();
+				result = gui2.show();
+				if (result == null) {
+					JOptionPane.showConfirmDialog(null, "Um nome deve ser informado. O jogo será encerrado.", "Erro",
+							JOptionPane.DEFAULT_OPTION);
+					frame.dispose();
+				} else {
+					try {
+						client.setNomeJogador(result.toString());
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		});
-		client = new FechaACaixaClient();
 	}
-
+	
 	private static void show(Janela ui) {
-		JFrame frame = new JFrame();
+		frame = new JFrame();
 		frame.setTitle("T1 Sistemas distribuidos - Leandro Oliveira e Nathan Dal Ben");
 		frame.getContentPane().setBackground(Color.white);
 		frame.setSize(620, 450);
@@ -75,42 +88,10 @@ public class Janela extends JPanel {
 	public Janela() {
 		setLayout(null);
 		JLabel lblFechaACaixa = new JLabel("FECHA A CAIXA");
-		lblFechaACaixa.setBounds(149, 5, 311, 49);
-		lblFechaACaixa.setHorizontalAlignment(SwingConstants.LEFT);
-		lblFechaACaixa.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblFechaACaixa.setFont(new Font("Tahoma", Font.BOLD, 40));
+		lblFechaACaixa.setBounds(10, 5, 580, 93);
+		lblFechaACaixa.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFechaACaixa.setFont(new Font("Tahoma", Font.BOLD, 60));
 		add(lblFechaACaixa);
-
-		campoNomeJogador = new JTextField();
-		campoNomeJogador.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		campoNomeJogador.setBounds(207, 73, 253, 31);
-		add(campoNomeJogador);
-		campoNomeJogador.setColumns(10);
-
-		JLabel lblNomeJogador = new JLabel("Nome do Jogador");
-		lblNomeJogador.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNomeJogador.setBounds(45, 76, 167, 24);
-		add(lblNomeJogador);
-
-		JButton btnOk = new JButton("Ok");
-		btnOk.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnOk.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				try {
-					client.setNomeJogador(campoNomeJogador.getText());
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		btnOk.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnOk.setBounds(468, 72, 72, 31);
-		add(btnOk);
 
 		JButton botao1 = new JButton("1");
 		botao1.setLocation(10, 124);
@@ -308,6 +289,7 @@ public class Janela extends JPanel {
 				try {
 					response = client.enviaJogada();
 					if (response) {
+						client.setSomaSelecionados(0);
 						desabilita = client.getCasas();
 						if (desabilita[0] == true) {
 							client.casaDeselecionada(0);
@@ -358,6 +340,7 @@ public class Janela extends JPanel {
 						JOptionPane.showConfirmDialog(null, "Jogada correta.", "Confirmação",
 								JOptionPane.DEFAULT_OPTION);
 					} else {
+						client.setSomaSelecionados(0);
 						botao1.setForeground(Color.BLACK);
 						botao2.setForeground(Color.BLACK);
 						botao3.setForeground(Color.BLACK);
@@ -421,15 +404,6 @@ public class Janela extends JPanel {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-//				if (dados == 2) {
-//					dado1.setText(Integer.toString(gerador.nextInt(6) + 1));
-//					dado2.setText(Integer.toString(gerador.nextInt(6) + 1));
-//				}
-//				if (dados == 1) {
-//					dado1.setText(Integer.toString(gerador.nextInt(6)));
-//					dado2.setText(" ");
-//				}
 			}
 		});
 		btnJogarDados.setFont(new Font("Tahoma", Font.PLAIN, 20));
