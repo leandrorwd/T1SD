@@ -30,7 +30,7 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 				break;
 			}
 		}
-		System.out.println("Jogar criado!");
+		System.out.println("Jogador criado!");
 		System.out.println(i);
 		return i;
 	}

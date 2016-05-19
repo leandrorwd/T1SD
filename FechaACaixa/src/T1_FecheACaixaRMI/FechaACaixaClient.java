@@ -8,12 +8,12 @@ import java.rmi.RemoteException;
 public class FechaACaixaClient {
 	int codigoJogador;
 	String nomeJogador;
-	int somaSelecionados;
+	int somaSelecionados, somaAcumulado;
 
 	// 0 livre
 	// 1 clicado aguardando jogada
 	// -1 desativado
-	boolean[] casas = { false, false, false, false, false, false, false, false, false};
+	boolean[] casas = { false, false, false, false, false, false, false, false, false };
 
 	public boolean[] getCasas() {
 		return casas;
@@ -27,6 +27,7 @@ public class FechaACaixaClient {
 
 	public FechaACaixaClient() throws MalformedURLException, RemoteException, NotBoundException {
 		somaSelecionados = 0;
+		somaAcumulado = 0;
 		casas = new boolean[9];
 		try {
 			fac = (FecheACaixaInterface) Naming.lookup("//localhost/Fecha");
@@ -61,28 +62,33 @@ public class FechaACaixaClient {
 	}
 
 	public int casaSelecionada(int pos) {
-		somaSelecionados += pos;
-		casas[pos - 1] = true;
+		somaSelecionados += pos+1;
+		casas[pos] = true;
 		return somaSelecionados;
 	}
 
 	public int casaDeselecionada(int pos) {
-		somaSelecionados -= pos;
-		casas[pos - 1] = false;
+		if (casas[pos] == true) {
+			somaSelecionados -= pos+1;
+			casas[pos] = false;
+		}
 		return somaSelecionados;
 	}
-	
+
 	public boolean enviaJogada() throws RemoteException {
-		somaSelecionados = 0;
+//		somaSelecionados = 0;
 		return fac.selecionaCasas(codigoJogador, casas);
 	}
-	
+
 	public int cancelaPartida() throws RemoteException {
 		return fac.encerraPartida(codigoJogador);
 	}
 
-	public int[] jogaDados() throws RemoteException{
+	public int[] jogaDados() throws RemoteException {
 		return fac.jogaDados(codigoJogador);
 	}
-	
+	public int incremAcumulado(int d) {
+		return somaAcumulado += d;
+	}
+
 }

@@ -73,7 +73,7 @@ package T1_FecheACaixaRMI;
 			}
 			if(numeroDadosAtuais==1)
 			{
-				dado1 = (int)(Math.random()*7);
+				dado1 = (int)(Math.random()*6+1);
 				dado2 = 0;
 			}
 			dados[0] = dado1;
@@ -117,9 +117,11 @@ package T1_FecheACaixaRMI;
 			int valorJogado = 0;
 			for(int i = 0;i<=8;i++){
 				if(jogada[i] == true){
-					valorJogado = valorJogado+i;	
+					valorJogado = valorJogado+(i+1);
 				}	
 			}
+//			System.out.println("total: " + total);
+//			System.out.println("valor jogado: " + valorJogado);
 			if(total == valorJogado){
 				
 				return true;
