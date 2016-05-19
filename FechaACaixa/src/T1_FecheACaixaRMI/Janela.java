@@ -26,7 +26,7 @@ import java.awt.Color;
 public class Janela extends JPanel {
 	static JFrame frame;
 	static int somaselecionados = 0;
-//	static int dados = 2;
+	// static int dados = 2;
 	int[] dados;
 	// boolean[] botoesSelec = new boolean[9];
 	public JTextField somaSelecionados;
@@ -284,91 +284,110 @@ public class Janela extends JPanel {
 		somaSelecionados.setColumns(10);
 
 		JButton btnConfirmarJogada = new JButton("Confirmar Jogada");
+		btnConfirmarJogada.setEnabled(false);
 		btnConfirmarJogada.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnConfirmarJogada.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				boolean response = false;
+				int response = -1;
 				boolean[] desabilita = new boolean[9];
-				try {
-					response = client.enviaJogada();
-					if (response) {
-						desabilita = client.getCasas();
-						if (desabilita[0] == true) {
-							client.casaDeselecionada(0);
-							botao1.setForeground(Color.GRAY);
-							botao1.setEnabled(false);
+				if (btnConfirmarJogada.isEnabled()) {
+					try {
+						response = client.enviaJogada();
+						if (response == 0) {
+							desabilita = client.getCasas();
+							if (desabilita[0] == true) {
+								client.casaDeselecionada(0);
+								botao1.setForeground(Color.GRAY);
+								botao1.setEnabled(false);
+							}
+							if (desabilita[1] == true) {
+								client.casaDeselecionada(1);
+								botao2.setForeground(Color.GRAY);
+								botao2.setEnabled(false);
+							}
+							if (desabilita[2] == true) {
+								client.casaDeselecionada(2);
+								botao3.setForeground(Color.GRAY);
+								botao3.setEnabled(false);
+							}
+							if (desabilita[3] == true) {
+								client.casaDeselecionada(3);
+								botao4.setForeground(Color.GRAY);
+								botao4.setEnabled(false);
+							}
+							if (desabilita[4] == true) {
+								client.casaDeselecionada(4);
+								botao5.setForeground(Color.GRAY);
+								botao5.setEnabled(false);
+							}
+							if (desabilita[5] == true) {
+								client.casaDeselecionada(5);
+								botao6.setForeground(Color.GRAY);
+								botao6.setEnabled(false);
+							}
+							if (desabilita[6] == true) {
+								client.casaDeselecionada(6);
+								botao7.setForeground(Color.GRAY);
+								botao7.setEnabled(false);
+							}
+							if (desabilita[7] == true) {
+								client.casaDeselecionada(7);
+								botao8.setForeground(Color.GRAY);
+								botao8.setEnabled(false);
+							}
+							if (desabilita[8] == true) {
+								client.casaDeselecionada(8);
+								botao9.setForeground(Color.GRAY);
+								botao9.setEnabled(false);
+							}
+							dado1.setText("");
+							dado2.setText("");
+							btnJogarDados.setEnabled(true);
+							btnConfirmarJogada.setEnabled(false);
+							somaSelecionados.setText(Integer.toString(client.somaSelecionados));
+							// System.out.println("Soma Selec: " +
+							// Integer.toString(client.somaSelecionados));
+							JOptionPane.showConfirmDialog(null, "Jogada correta.", "Confirmação",
+									JOptionPane.DEFAULT_OPTION);
+						} else if (response == -1) {
+							if (botao1.isEnabled()) 
+								botao1.setForeground(Color.BLACK);
+							if (botao2.isEnabled()) 
+								botao2.setForeground(Color.BLACK);
+							if (botao3.isEnabled()) 
+								botao3.setForeground(Color.BLACK);
+							if (botao4.isEnabled()) 
+								botao4.setForeground(Color.BLACK);
+							if (botao5.isEnabled()) 
+								botao5.setForeground(Color.BLACK);
+							if (botao6.isEnabled()) 
+								botao6.setForeground(Color.BLACK);
+							if (botao7.isEnabled()) 
+								botao7.setForeground(Color.BLACK);
+							if (botao8.isEnabled()) 
+								botao8.setForeground(Color.BLACK);
+							if (botao9.isEnabled()) 
+								botao9.setForeground(Color.BLACK);
+							for (int i = 0; i < 9; i++) {
+								client.casaDeselecionada(i);
+							}
+							btnJogarDados.setEnabled(false);
+							somaSelecionados.setText(Integer.toString(client.somaSelecionados));
+							JOptionPane.showConfirmDialog(null, "Jogada incorreta.", "Confirmação",
+									JOptionPane.DEFAULT_OPTION);
+						} else if (response == 1) {
+							JOptionPane.showConfirmDialog(null,
+									"Você concluiu o jogo com " + subtotal.getText() + " pontos. Parabéns!",
+									"Jogo concluído", JOptionPane.DEFAULT_OPTION);
+							frame.dispose();
 						}
-						if (desabilita[1] == true) {
-							client.casaDeselecionada(1);
-							botao2.setForeground(Color.GRAY);
-							botao2.setEnabled(false);
-						}
-						if (desabilita[2] == true) {
-							client.casaDeselecionada(2);
-							botao3.setForeground(Color.GRAY);
-							botao3.setEnabled(false);
-						}
-						if (desabilita[3] == true) {
-							client.casaDeselecionada(3);
-							botao4.setForeground(Color.GRAY);
-							botao4.setEnabled(false);
-						}
-						if (desabilita[4] == true) {
-							client.casaDeselecionada(4);
-							botao5.setForeground(Color.GRAY);
-							botao5.setEnabled(false);
-						}
-						if (desabilita[5] == true) {
-							client.casaDeselecionada(5);
-							botao6.setForeground(Color.GRAY);
-							botao6.setEnabled(false);
-						}
-						if (desabilita[6] == true) {
-							client.casaDeselecionada(6);
-							botao7.setForeground(Color.GRAY);
-							botao7.setEnabled(false);
-						}
-						if (desabilita[7] == true) {
-							client.casaDeselecionada(7);
-							botao8.setForeground(Color.GRAY);
-							botao8.setEnabled(false);
-						}
-						if (desabilita[8] == true) {
-							client.casaDeselecionada(8);
-							botao9.setForeground(Color.GRAY);
-							botao9.setEnabled(false);
-						}
-						dado1.setText("");
-						dado2.setText("");
-						btnJogarDados.setEnabled(true);
-						somaSelecionados.setText(Integer.toString(client.somaSelecionados));
-						System.out.println("Soma Selec: " + Integer.toString(client.somaSelecionados));
-						JOptionPane.showConfirmDialog(null, "Jogada correta.", "Confirmação",
+					} catch (RemoteException e2) {
+						// TODO Auto-generated catch block
+						JOptionPane.showConfirmDialog(null, "Ocorreu um erro na comunicação. Tente novamente.", "ERRO",
 								JOptionPane.DEFAULT_OPTION);
-					} else {
-						botao1.setForeground(Color.BLACK);
-						botao2.setForeground(Color.BLACK);
-						botao3.setForeground(Color.BLACK);
-						botao4.setForeground(Color.BLACK);
-						botao5.setForeground(Color.BLACK);
-						botao6.setForeground(Color.BLACK);
-						botao7.setForeground(Color.BLACK);
-						botao8.setForeground(Color.BLACK);
-						botao9.setForeground(Color.BLACK);
-						for (int i = 0; i < 9; i++) {
-							client.casaDeselecionada(i);
-						}
-						btnJogarDados.setEnabled(false);
-						somaSelecionados.setText(Integer.toString(client.somaSelecionados));
-						JOptionPane.showConfirmDialog(null, "Jogada incorreta.", "Confirmação",
-								JOptionPane.DEFAULT_OPTION);
+						e2.printStackTrace();
 					}
-				} catch (RemoteException e2) {
-					// TODO Auto-generated catch block
-					JOptionPane.showConfirmDialog(null, "Ocorreu um erro na comunicação. Tente novamente.", "ERRO",
-							JOptionPane.DEFAULT_OPTION);
-					e2.printStackTrace();
 				}
 			}
 		});
@@ -414,6 +433,7 @@ public class Janela extends JPanel {
 							dado2.setText("-");
 						}
 						btnJogarDados.setEnabled(false);
+						btnConfirmarJogada.setEnabled(true);
 					} catch (RemoteException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -435,6 +455,9 @@ public class Janela extends JPanel {
 					try {
 						if (client.cancelaPartida() == 1) {
 							subtotal.setText(Integer.toString(client.incremAcumulado(dados[0] + dados[1])));
+							dado1.setText("");
+							dado2.setText("");
+							btnConfirmarJogada.setEnabled(false);
 							btnJogarDados.setEnabled(true);
 						}
 					} catch (RemoteException e) {

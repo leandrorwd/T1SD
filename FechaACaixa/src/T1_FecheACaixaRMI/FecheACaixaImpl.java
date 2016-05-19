@@ -60,7 +60,7 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	}
 
 	@Override
-	public boolean selecionaCasas(int id, boolean[] casas) throws RemoteException {
+	public int selecionaCasas(int id, boolean[] casas) throws RemoteException {
 		// TODO Auto-generated method stub
 		return jogo[id].realizaJogada(casas);
 	}

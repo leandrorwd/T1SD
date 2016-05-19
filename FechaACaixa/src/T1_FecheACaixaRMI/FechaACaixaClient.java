@@ -75,7 +75,7 @@ public class FechaACaixaClient {
 		return somaSelecionados;
 	}
 
-	public boolean enviaJogada() throws RemoteException {
+	public int enviaJogada() throws RemoteException {
 //		somaSelecionados = 0;
 		return fac.selecionaCasas(codigoJogador, casas);
 	}
