@@ -14,11 +14,14 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	String nomeJogador;
+
+	// 1) registraJogador
+	// Recebe: string com o nome do usuário/jogador.
+	// Retorna: id (valor inteiro) do usuário (que corresponde a um número de identificação único para este
+	// usuário durante uma partida), ­1 se este usuário já está cadastrado ou ­2 se o número máximo de
+	// jogadores (ou seja, de partidas) tiver sido atingido.
 
 	@Override
 	public int registraJogador(String nome) throws RemoteException {
@@ -35,47 +38,17 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 		return i;
 	}
 
-	@Override
-	public int encerraPartida(int id) throws RemoteException {
-		// TODO Auto-generated method stub
-		return 1;
-	}
-
-	@Override
-	public int obtemTabuleiro(int id) throws RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int obtemPontuacao(int id) throws RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int[] jogaDados(int id) throws RemoteException {
-		// TODO Auto-generated method stub
-		return jogo[id].giraDados();
-	}
-
-	@Override
-	public int selecionaCasas(int id, boolean[] casas) throws RemoteException {
-		// TODO Auto-generated method stub
-		return jogo[id].realizaJogada(casas);
-	}
-
-	// 1) registraJogador
-	// Recebe: string com o nome do usuário/jogador.
-	// Retorna: id (valor inteiro) do usuário (que corresponde a um número de identificação único para este
-	// usuário durante uma partida), ­1 se este usuário já está cadastrado ou ­2 se o número máximo de
-	// jogadores (ou seja, de partidas) tiver sido atingido.
-
 	// 2) encerraPartida
 	// Recebe: id do usuário (obtido através da chamada registraJogador).
 	// Retorna:  ­1 em caso  de erro ou 0 em
 	//  caso de sucesso, ou seja, a partida foi  encerrada e as
 	// informações desta partida podem ser descartadas.
+
+	@Override
+	public void encerraPartida(int id) throws RemoteException {
+		// TODO Auto-generated method stub
+		jogo[id] = null;
+	}
 
 	// 3) obtemTabuleiro
 	// Recebe: id do usuário (obtido através da chamada registraJogador).
@@ -86,9 +59,22 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	// (soma 9), este método retornará “_2_4_6789”. O jogo estará encerrado quando este método retornar
 	// “_________” (após o que o cliente poderá chamar os métodos obtemPontuacao e encerraPartida).
 
+	@Override
+	public int obtemTabuleiro(int id) throws RemoteException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	// 4) obtemPontuacao
 	// Recebe: id do usuário (obtido através da chamada registraJogador).
 	// Retorna: valor inteiro correspondente aos pontos acumulados até o momento ou ­1 em caso de erro.
+
+	@Override
+	public int obtemPontuacao(int id) throws RemoteException {
+		// TODO Auto-generated method stub
+		jogo[id].setScore();
+		return jogo[id].getScore();
+	}
 
 	// 5) jogaDados
 	// Recebe: id do usuário (obtido através da chamada registraJogador).
@@ -98,10 +84,21 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	// exemplo, “6” que significa que as casas “7”, “8” e “9” já estão fechadas e o valor do dado lançado
 	// foi “6” (soma igual a 6). 
 
+	@Override
+	public int[] jogaDados(int id) throws RemoteException {
+		// TODO Auto-generated method stub
+		return jogo[id].giraDados();
+	}
+
 	// 6) selecionaCasas
 	// Recebe: id do usuário (obtido através da chamada registraJogador), string com os dígitos das casas a
 	// serem fechadas (este string pode conter de um a quatro dígitos).
 	// Retorna: 0 (seleção corretamente aplicada, ou seja, tudo certo), ­1 (identificador inválido) ou ­2 (erro
 	// na seleção).
 
+	@Override
+	public int selecionaCasas(int id, boolean[] casas) throws RemoteException {
+		// TODO Auto-generated method stub
+		return jogo[id].realizaJogada(casas);
+	}
 }

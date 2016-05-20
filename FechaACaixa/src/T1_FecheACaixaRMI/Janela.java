@@ -21,6 +21,7 @@ import java.rmi.RemoteException;
 import java.util.Random;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class Janela extends JPanel {
@@ -36,6 +37,7 @@ public class Janela extends JPanel {
 	static Random gerador = new Random();
 	static FechaACaixaClient client;
 	private JTextField subtotal;
+	private JButton btn_desistir;
 
 	public static void main(String args[])
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException,
@@ -76,9 +78,9 @@ public class Janela extends JPanel {
 
 	private static void show(Janela ui) {
 		frame = new JFrame();
-		frame.setTitle("T1 Sistemas distribuidos - Leandro Oliveira e Nathan Dal Ben");
+		frame.setTitle("T1 ... Sistemas distribuidos - Leandro Oliveira e Nathan Dal Ben");
 		frame.getContentPane().setBackground(Color.white);
-		frame.setSize(620, 475);
+		frame.setSize(614, 603);
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.getContentPane().add(ui, BorderLayout.CENTER);
 		frame.setLocationRelativeTo(null); // position in the center of the
@@ -92,13 +94,13 @@ public class Janela extends JPanel {
 	public Janela() {
 		setLayout(null);
 		JLabel lblFechaACaixa = new JLabel("FECHA A CAIXA");
-		lblFechaACaixa.setBounds(10, 5, 580, 93);
+		lblFechaACaixa.setBounds(10, 5, 580, 63);
 		lblFechaACaixa.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFechaACaixa.setFont(new Font("Tahoma", Font.BOLD, 60));
+		lblFechaACaixa.setFont(new Font("Tahoma", Font.BOLD, 40));
 		add(lblFechaACaixa);
 
 		JButton botao1 = new JButton("1");
-		botao1.setLocation(10, 124);
+		botao1.setLocation(10, 241);
 		botao1.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		botao1.setSize(55, 93);
 		add(botao1);
@@ -118,7 +120,7 @@ public class Janela extends JPanel {
 		});
 
 		JButton botao2 = new JButton("2");
-		botao2.setBounds(75, 124, 55, 93);
+		botao2.setBounds(75, 241, 55, 93);
 		add(botao2);
 		botao2.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		botao2.addMouseListener(new MouseAdapter() {
@@ -137,7 +139,7 @@ public class Janela extends JPanel {
 		});
 
 		JButton botao3 = new JButton("3");
-		botao3.setBounds(139, 124, 55, 93);
+		botao3.setBounds(139, 241, 55, 93);
 		add(botao3);
 		botao3.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		botao3.addMouseListener(new MouseAdapter() {
@@ -158,7 +160,7 @@ public class Janela extends JPanel {
 		});
 
 		JButton botao4 = new JButton("4");
-		botao4.setBounds(204, 124, 55, 93);
+		botao4.setBounds(204, 241, 55, 93);
 		add(botao4);
 		botao4.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		botao4.addMouseListener(new MouseAdapter() {
@@ -177,7 +179,7 @@ public class Janela extends JPanel {
 		});
 
 		JButton botao5 = new JButton("5");
-		botao5.setBounds(269, 124, 55, 93);
+		botao5.setBounds(269, 241, 55, 93);
 		add(botao5);
 		botao5.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		botao5.addMouseListener(new MouseAdapter() {
@@ -196,7 +198,7 @@ public class Janela extends JPanel {
 		});
 
 		JButton botao6 = new JButton("6");
-		botao6.setBounds(334, 124, 55, 93);
+		botao6.setBounds(334, 241, 55, 93);
 		add(botao6);
 		botao6.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		botao6.addMouseListener(new MouseAdapter() {
@@ -215,7 +217,7 @@ public class Janela extends JPanel {
 		});
 
 		JButton botao7 = new JButton("7");
-		botao7.setBounds(399, 124, 55, 93);
+		botao7.setBounds(399, 241, 55, 93);
 		add(botao7);
 		botao7.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		botao7.addMouseListener(new MouseAdapter() {
@@ -234,7 +236,7 @@ public class Janela extends JPanel {
 		});
 
 		JButton botao8 = new JButton("8");
-		botao8.setBounds(464, 124, 55, 93);
+		botao8.setBounds(464, 241, 55, 93);
 		add(botao8);
 		botao8.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		botao8.addMouseListener(new MouseAdapter() {
@@ -268,18 +270,18 @@ public class Janela extends JPanel {
 			}
 		});
 		botao9.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		botao9.setBounds(529, 124, 55, 93);
+		botao9.setBounds(529, 241, 55, 93);
 		add(botao9);
 
 		JLabel lblTotalSelecionado = new JLabel("Total selecionado:");
 		lblTotalSelecionado.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblTotalSelecionado.setBounds(43, 236, 179, 21);
+		lblTotalSelecionado.setBounds(44, 400, 179, 21);
 		add(lblTotalSelecionado);
 
 		somaSelecionados = new JTextField();
 		somaSelecionados.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		somaSelecionados.setHorizontalAlignment(SwingConstants.CENTER);
-		somaSelecionados.setBounds(254, 232, 55, 31);
+		somaSelecionados.setBounds(243, 396, 66, 31);
 		add(somaSelecionados);
 		somaSelecionados.setColumns(10);
 
@@ -343,6 +345,7 @@ public class Janela extends JPanel {
 							}
 							dado1.setText("");
 							dado2.setText("");
+							btn_desistir.setEnabled(false);
 							btnJogarDados.setEnabled(true);
 							btnConfirmarJogada.setEnabled(false);
 							somaSelecionados.setText(Integer.toString(client.somaSelecionados));
@@ -351,23 +354,23 @@ public class Janela extends JPanel {
 							JOptionPane.showConfirmDialog(null, "Jogada correta.", "Confirmação",
 									JOptionPane.DEFAULT_OPTION);
 						} else if (response == -1) {
-							if (botao1.isEnabled()) 
+							if (botao1.isEnabled())
 								botao1.setForeground(Color.BLACK);
-							if (botao2.isEnabled()) 
+							if (botao2.isEnabled())
 								botao2.setForeground(Color.BLACK);
-							if (botao3.isEnabled()) 
+							if (botao3.isEnabled())
 								botao3.setForeground(Color.BLACK);
-							if (botao4.isEnabled()) 
+							if (botao4.isEnabled())
 								botao4.setForeground(Color.BLACK);
-							if (botao5.isEnabled()) 
+							if (botao5.isEnabled())
 								botao5.setForeground(Color.BLACK);
-							if (botao6.isEnabled()) 
+							if (botao6.isEnabled())
 								botao6.setForeground(Color.BLACK);
-							if (botao7.isEnabled()) 
+							if (botao7.isEnabled())
 								botao7.setForeground(Color.BLACK);
-							if (botao8.isEnabled()) 
+							if (botao8.isEnabled())
 								botao8.setForeground(Color.BLACK);
-							if (botao9.isEnabled()) 
+							if (botao9.isEnabled())
 								botao9.setForeground(Color.BLACK);
 							for (int i = 0; i < 9; i++) {
 								client.casaDeselecionada(i);
@@ -380,6 +383,7 @@ public class Janela extends JPanel {
 							JOptionPane.showConfirmDialog(null,
 									"Você concluiu o jogo com " + subtotal.getText() + " pontos. Parabéns!",
 									"Jogo concluído", JOptionPane.DEFAULT_OPTION);
+							client.encerraPartida();
 							frame.dispose();
 						}
 					} catch (RemoteException e2) {
@@ -391,31 +395,31 @@ public class Janela extends JPanel {
 				}
 			}
 		});
-		btnConfirmarJogada.setBounds(382, 232, 189, 67);
+		btnConfirmarJogada.setBounds(382, 379, 189, 67);
 		add(btnConfirmarJogada);
 
 		dado1 = new JTextField();
 		dado1.setHorizontalAlignment(SwingConstants.CENTER);
 		dado1.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		dado1.setBounds(32, 303, 86, 67);
+		dado1.setBounds(100, 114, 86, 67);
 		add(dado1);
 		dado1.setColumns(10);
 
 		JLabel lblDado = new JLabel("Dado 1");
 		lblDado.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblDado.setBounds(43, 270, 72, 23);
+		lblDado.setBounds(28, 135, 72, 23);
 		add(lblDado);
 
 		JLabel lblDado_1 = new JLabel("Dado 2");
 		lblDado_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblDado_1.setBounds(145, 270, 70, 22);
+		lblDado_1.setBounds(205, 135, 70, 22);
 		add(lblDado_1);
 
 		dado2 = new JTextField();
 		dado2.setHorizontalAlignment(SwingConstants.CENTER);
 		dado2.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		dado2.setColumns(10);
-		dado2.setBounds(134, 303, 86, 67);
+		dado2.setBounds(275, 114, 86, 67);
 		add(dado2);
 
 		btnJogarDados = new JButton("Jogar dados");
@@ -434,6 +438,7 @@ public class Janela extends JPanel {
 						}
 						btnJogarDados.setEnabled(false);
 						btnConfirmarJogada.setEnabled(true);
+						btn_desistir.setEnabled(true);
 					} catch (RemoteException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -442,45 +447,118 @@ public class Janela extends JPanel {
 			}
 		});
 		btnJogarDados.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnJogarDados.setBounds(238, 303, 139, 67);
+		btnJogarDados.setBounds(382, 115, 189, 67);
 		add(btnJogarDados);
 
-		JButton btn_desistir = new JButton("Acumular Dados");
+		btn_desistir = new JButton("Acumular Dados");
+		btn_desistir.setEnabled(false);
 		btn_desistir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				int answer = JOptionPane.showConfirmDialog(null, "Deseja acumular o valor dos dados?", "Confirmação",
-						JOptionPane.YES_NO_OPTION);
-				if (answer == 0) {
-					try {
-						if (client.cancelaPartida() == 1) {
-							subtotal.setText(Integer.toString(client.incremAcumulado(dados[0] + dados[1])));
+				if (btn_desistir.isEnabled()) {
+					int answer = JOptionPane.showConfirmDialog(null, "Deseja acumular o valor dos dados?",
+							"Confirmação", JOptionPane.YES_NO_OPTION);
+					if (answer == 0) {
+						try {
+
+							subtotal.setText(Integer.toString(client.getScore()));
 							dado1.setText("");
 							dado2.setText("");
 							btnConfirmarJogada.setEnabled(false);
 							btnJogarDados.setEnabled(true);
+							btn_desistir.setEnabled(false);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
 				}
 			}
 		});
 		btn_desistir.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btn_desistir.setBounds(306, 391, 225, 40);
+		btn_desistir.setBounds(382, 485, 189, 67);
 		add(btn_desistir);
 
 		JLabel lblSubtotalAcumulado = new JLabel("Subtotal Acumulado:");
 		lblSubtotalAcumulado.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblSubtotalAcumulado.setBounds(23, 403, 201, 21);
+		lblSubtotalAcumulado.setBounds(44, 509, 201, 21);
 		add(lblSubtotalAcumulado);
 
 		subtotal = new JTextField();
 		subtotal.setHorizontalAlignment(SwingConstants.CENTER);
 		subtotal.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		subtotal.setColumns(10);
-		subtotal.setBounds(225, 397, 66, 31);
+		subtotal.setBounds(243, 504, 66, 31);
 		add(subtotal);
+
+		JLabel lblJogueOsDados = new JLabel("1. Jogue os Dados");
+		lblJogueOsDados.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblJogueOsDados.setBounds(23, 74, 107, 14);
+		add(lblJogueOsDados);
+
+		JLabel lblEscolhaOsNmeros = new JLabel("2. Escolha os n\u00FAmeros, que somados, deem a soma dos dados");
+		lblEscolhaOsNmeros.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblEscolhaOsNmeros.setBounds(23, 212, 351, 14);
+		add(lblEscolhaOsNmeros);
+
+		JLabel lblSeOsNmeros = new JLabel("3. Se os n\u00FAmeros combinarem com os dados, confirme a jogada");
+		lblSeOsNmeros.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblSeOsNmeros.setBounds(23, 357, 366, 14);
+		add(lblSeOsNmeros);
+
+		JLabel lblSeNoCombinarem = new JLabel(
+				"4. Se n\u00E3o combinarem, acumule os pontos e jogue os dados novamente");
+		lblSeNoCombinarem.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblSeNoCombinarem.setBounds(23, 463, 431, 14);
+		add(lblSeNoCombinarem);
+
+		JPanel panel = new JPanel();
+		panel.setForeground(Color.GRAY);
+		panel.setBorder(new LineBorder(Color.GRAY));
+		panel.setBounds(7, 90, 583, 111);
+		add(panel);
+
+		JPanel panel_1 = new JPanel();
+		panel_1.setForeground(Color.GRAY);
+		panel_1.setBorder(new LineBorder(Color.GRAY));
+		panel_1.setBounds(7, 228, 583, 118);
+		add(panel_1);
+
+		JPanel panel_2 = new JPanel();
+		panel_2.setForeground(Color.GRAY);
+		panel_2.setBorder(new LineBorder(Color.GRAY));
+		panel_2.setBounds(7, 70, 583, 21);
+		add(panel_2);
+
+		JPanel panel_3 = new JPanel();
+		panel_3.setForeground(Color.GRAY);
+		panel_3.setBorder(new LineBorder(Color.GRAY));
+		panel_3.setBounds(7, 208, 583, 21);
+		add(panel_3);
+
+		JPanel panel_4 = new JPanel();
+		panel_4.setForeground(Color.GRAY);
+		panel_4.setBorder(new LineBorder(Color.GRAY));
+		panel_4.setBounds(8, 353, 583, 21);
+		add(panel_4);
+
+		JPanel panel_5 = new JPanel();
+		panel_5.setForeground(Color.GRAY);
+		panel_5.setBorder(new LineBorder(Color.GRAY));
+		panel_5.setBounds(8, 373, 583, 78);
+		add(panel_5);
+
+		JPanel panel_6 = new JPanel();
+		panel_6.setForeground(Color.GRAY);
+		panel_6.setBorder(new LineBorder(Color.GRAY));
+		panel_6.setBounds(8, 459, 583, 21);
+		add(panel_6);
+
+		JPanel panel_7 = new JPanel();
+		panel_7.setForeground(Color.GRAY);
+		panel_7.setBorder(new LineBorder(Color.GRAY));
+		panel_7.setBounds(8, 479, 583, 78);
+		add(panel_7);
+
 	}
 }

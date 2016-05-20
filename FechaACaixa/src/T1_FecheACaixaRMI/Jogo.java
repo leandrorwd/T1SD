@@ -13,6 +13,7 @@ public class Jogo {
 	public Jogo(String nomeJogador, int id) {
 		this.id = id;
 		tabuleiro = new boolean[9];
+		score = 0;
 		for (int i = 0; i <= 8; i++) {
 			tabuleiro[i] = true;
 		}
@@ -107,8 +108,6 @@ public class Jogo {
 				valorJogado = valorJogado + (i + 1);
 			}
 		}
-		// System.out.println("total: " + total);
-		// System.out.println("valor jogado: " + valorJogado);
 		if (total == valorJogado) {
 
 			return true;
@@ -132,8 +131,23 @@ public class Jogo {
 			if (verifica == 9) {
 				return true;
 			}
-			System.out.println("\n\n\n" + tabuleiro[i]);
 		}
 		return false;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getNomeJogador() {
+		return nomeJogador;
+	}
+
+	public void setNomeJogador(String nomeJogador) {
+		this.nomeJogador = nomeJogador;
 	}
 }

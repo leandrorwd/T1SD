@@ -80,15 +80,16 @@ public class FechaACaixaClient {
 		return fac.selecionaCasas(codigoJogador, casas);
 	}
 
-	public int cancelaPartida() throws RemoteException {
-		return fac.encerraPartida(codigoJogador);
+	public void encerraPartida() throws RemoteException {
+		fac.encerraPartida(codigoJogador);
 	}
 
 	public int[] jogaDados() throws RemoteException {
 		return fac.jogaDados(codigoJogador);
 	}
-	public int incremAcumulado(int d) {
-		return somaAcumulado += d;
+	public int getScore() throws RemoteException {
+		int score = fac.obtemPontuacao(codigoJogador);
+		return score;
 	}
 
 }
