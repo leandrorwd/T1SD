@@ -74,8 +74,6 @@ public class Janela extends JPanel {
 					e.printStackTrace();
 				}
 				
-				
-
 				System.out.println();
 				Object result;
 				Janela gui = new Janela();
@@ -114,6 +112,17 @@ public class Janela extends JPanel {
 		});
 	}
 
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	private static void show(Janela ui) {
 		frame = new JFrame();
 		frame.setTitle("T1 | Sistemas distribuidos | Leandro Oliveira e Nathan Dal Ben");
@@ -126,9 +135,17 @@ public class Janela extends JPanel {
 		frame.setVisible(true);
 	}
 
-	/**
-	 * Create the panel.
-	 */
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	public Janela() {
 
 		setLayout(null);

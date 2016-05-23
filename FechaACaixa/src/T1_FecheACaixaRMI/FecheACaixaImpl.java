@@ -23,6 +23,17 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	// usuário durante uma partida), ­1 se este usuário já está cadastrado ou ­2 se o número máximo de
 	// jogadores (ou seja, de partidas) tiver sido atingido.
 
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	@Override
 	public int registraJogador(String nome) throws RemoteException {
 		// TODO Auto-generated method stub
@@ -42,6 +53,17 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	//  caso de sucesso, ou seja, a partida foi  encerrada e as
 	// informações desta partida podem ser descartadas.
 
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	@Override
 	public void encerraPartida(int id) throws RemoteException {
 		// TODO Auto-generated method stub
@@ -57,6 +79,17 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	// (soma 9), este método retornará “_2_4_6789”. O jogo estará encerrado quando este método retornar
 	// “_________” (após o que o cliente poderá chamar os métodos obtemPontuacao e encerraPartida).
 
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	@Override
 	public int obtemTabuleiro(int id) throws RemoteException {
 		// TODO Auto-generated method stub
@@ -67,6 +100,17 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	// Recebe: id do usuário (obtido através da chamada registraJogador).
 	// Retorna: valor inteiro correspondente aos pontos acumulados até o momento ou ­1 em caso de erro.
 
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	@Override
 	public int obtemPontuacao(int id) throws RemoteException {
 		// TODO Auto-generated method stub
@@ -82,6 +126,17 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	// exemplo, “6” que significa que as casas “7”, “8” e “9” já estão fechadas e o valor do dado lançado
 	// foi “6” (soma igual a 6). 
 
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	@Override
 	public int[] jogaDados(int id) throws RemoteException {
 		// TODO Auto-generated method stub
@@ -94,27 +149,93 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	// Retorna: 0 (seleção corretamente aplicada, ou seja, tudo certo), ­1 (identificador inválido) ou ­2 (erro
 	// na seleção).
 
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	@Override
 	public int enviaJogada(int id) throws RemoteException {
 		// TODO Auto-generated method stub
 		return jogo[id].realizaJogada();
 	}
 	
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
 	
 	public String getNomeJogador(int id) throws RemoteException{
 		return jogo[id].getNomeJogador();
 	}
 	
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	public void setSelecionaCasa(int id, int pos, boolean e) {
 		jogo[id].setSelecionaCasa(pos, e);
 	}
 	
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	public boolean[] getSelecionadas(int id) throws RemoteException{
 		return jogo[id].getSelecionadas();
 	}
+	
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
+	
 	public int getSomaSelecionadas(int id) throws RemoteException{
 		return jogo[id].getSomaSelecionadas();
 	}
+	
+	 /**
+	  * Valida um movimento de xadrez.
+	  * 
+	  * @param aColunaDe   Coluna atual da peça a ser movida
+	  * @param aLinhaDe    Linha atual da peça a ser movida
+	  * @param aColunaPara Coluna destino da peça a ser movida
+	  * @param aLinhaPara  Linha destino da peça a ser movida
+	  * @author            Leandro Oliveira
+	  * @author            Nathan Dal Ben Flores
+	  **/
 	
 	public void zerarSomaSelecionadas (int id) throws RemoteException{
 		jogo[id].zerarSomaSelecionadas();
