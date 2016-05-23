@@ -4,6 +4,8 @@ public class Jogo {
 	private int id;
 	private String nomeJogador;
 	private boolean[] tabuleiro;
+	private boolean[] selecionadas;
+	private int somaSelecionados;
 	private int numeroDadosAtuais;
 	private int dado1;
 	private int dado2;
@@ -13,9 +15,12 @@ public class Jogo {
 	public Jogo(String nomeJogador, int id) {
 		this.id = id;
 		tabuleiro = new boolean[9];
+		selecionadas = new boolean[9];
 		score = 0;
-		for (int i = 0; i <= 8; i++) {
+		somaSelecionados = 0;
+		for (int i = 0; i < 9; i++) {
 			tabuleiro[i] = true;
+			selecionadas[i] = false;
 		}
 		this.nomeJogador = nomeJogador;
 		numeroDadosAtuais = 2;
@@ -24,20 +29,17 @@ public class Jogo {
 	// Realiza a jogada e retorna o novo tabuleiro se a jogada for valida.
 	// Quando for usar isso usar um try catch e buscar o status caso der
 	// nullpointer
-	public int realizaJogada(boolean[] jogada) {
-
-		if (!validaCasas(jogada)) {
+	public int realizaJogada() {
+		if (!validaCasas(selecionadas)) {
 			status = "Uma ou mais casas não poderam ser selecionadas";
 			return -1;
 		}
-		if (!validaJogada(jogada)) {
+		if (!validaJogada(selecionadas)) {
 			status = "Sua conta está incorreta";
 			return -1;
 		}
-		marcaCasasJogadas(jogada);
+		marcaCasasJogadas(selecionadas);
 		setNumeroDados();
-		// AINDA NAO SEI COMO VAMOS TRATAR O FINAL DO JOGO, POR ENQUANTO NA MSG
-		// DE ERRO ELE VAI APARECER
 		if (verificaFinal()) {
 			status = "O jogo terminou";
 			return 1;
@@ -133,6 +135,27 @@ public class Jogo {
 			}
 		}
 		return false;
+	}
+
+	public void setSelecionaCasa(int pos, boolean e) {
+		if (e) {
+			somaSelecionados += pos;
+		} else {
+			somaSelecionados -= pos;
+		}
+		selecionadas[pos - 1] = e;
+	}
+
+	public boolean[] getSelecionadas() {
+		return selecionadas;
+	}
+
+	public int getSomaSelecionadas() {
+		return somaSelecionados;
+	}
+
+	public void zerarSomaSelecionadas() {
+		somaSelecionados = 0;
 	}
 
 	public int getId() {

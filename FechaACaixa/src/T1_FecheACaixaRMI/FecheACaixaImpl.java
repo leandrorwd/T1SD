@@ -33,8 +33,6 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 				break;
 			}
 		}
-		System.out.println("Jogador criado!");
-		System.out.println(i);
 		return i;
 	}
 
@@ -97,8 +95,29 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	// na seleção).
 
 	@Override
-	public int selecionaCasas(int id, boolean[] casas) throws RemoteException {
+	public int enviaJogada(int id) throws RemoteException {
 		// TODO Auto-generated method stub
-		return jogo[id].realizaJogada(casas);
+		return jogo[id].realizaJogada();
 	}
+	
+	
+	public String getNomeJogador(int id) throws RemoteException{
+		return jogo[id].getNomeJogador();
+	}
+	
+	public void setSelecionaCasa(int id, int pos, boolean e) {
+		jogo[id].setSelecionaCasa(pos, e);
+	}
+	
+	public boolean[] getSelecionadas(int id) throws RemoteException{
+		return jogo[id].getSelecionadas();
+	}
+	public int getSomaSelecionadas(int id) throws RemoteException{
+		return jogo[id].getSomaSelecionadas();
+	}
+	
+	public void zerarSomaSelecionadas (int id) throws RemoteException{
+		jogo[id].zerarSomaSelecionadas();
+	}
+	
 }

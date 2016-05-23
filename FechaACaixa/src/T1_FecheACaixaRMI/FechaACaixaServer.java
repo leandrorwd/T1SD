@@ -2,21 +2,36 @@ package T1_FecheACaixaRMI;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import javax.swing.JOptionPane;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class FechaACaixaServer {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+		
+		for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+			if ("Windows".equals(info.getName())) {
+				javax.swing.UIManager.setLookAndFeel(info.getClassName());
+				break;
+			}
+		}
 		try {
 			java.rmi.registry.LocateRegistry.createRegistry(1099);
-			System.out.println("RMI registry ready.");
 		} catch (RemoteException e) {
-			System.out.println("RMI registry already running.");
 		}
 		try {
 			Naming.rebind("Fecha", new FecheACaixaImpl());
-			System.out.println("FechaACaixaServer is ready.");
 		} catch (Exception e) {
-			System.out.println("FechaACaixaServer failed:");
 			e.printStackTrace();
+		}
+		boolean opt = true;
+		while (opt) {
+			int result = JOptionPane.showConfirmDialog(null, "Servidor rodando. Deseja encerrar?",
+					"Server", JOptionPane.YES_NO_OPTION);
+			if (result == 0) {
+				System.exit(0);
+			} else {
+				opt = true;
+			}
 		}
 	}
 }

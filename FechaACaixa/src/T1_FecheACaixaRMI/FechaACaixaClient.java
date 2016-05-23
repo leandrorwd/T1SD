@@ -6,90 +6,53 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class FechaACaixaClient {
-	int codigoJogador;
-	String nomeJogador;
-	int somaSelecionados, somaAcumulado;
-
-	// 0 livre
-	// 1 clicado aguardando jogada
-	// -1 desativado
-	boolean[] casas = { false, false, false, false, false, false, false, false, false };
-
-	public boolean[] getCasas() {
-		return casas;
-	}
-
-	public void setCasas(boolean[] casas) {
-		this.casas = casas;
-	}
-
+	int id;
 	FecheACaixaInterface fac;
 
-	public FechaACaixaClient() throws MalformedURLException, RemoteException, NotBoundException {
-		somaSelecionados = 0;
-		somaAcumulado = 0;
-		casas = new boolean[9];
+	public FechaACaixaClient(String server) throws MalformedURLException, RemoteException, NotBoundException {
 		try {
-			fac = (FecheACaixaInterface) Naming.lookup("//localhost/Fecha");
+			fac = (FecheACaixaInterface) Naming.lookup("//" + server + "/Fecha");
 		} catch (Exception e) {
 			System.out.println("Erro TF.");
 		}
 	}
 
-	public int getCodigoJogador() {
-		return codigoJogador;
-	}
-
-	public void setCodigoJogador(int codigoJogador) {
-		this.codigoJogador = codigoJogador;
-	}
-
-	public String getNomeJogador() {
-		return nomeJogador;
+	public String getNomeJogador() throws RemoteException {
+		return fac.getNomeJogador(id);
 	}
 
 	public void setNomeJogador(String nomeJogador) throws RemoteException {
-		this.nomeJogador = nomeJogador;
-		codigoJogador = fac.registraJogador(nomeJogador);
+		id = fac.registraJogador(nomeJogador);
 	}
 
-	public String getSomaSelecionados() {
-		return Integer.toString(somaSelecionados);
+	public void setSelecionaCasa(int pos, boolean b) throws RemoteException {
+		fac.setSelecionaCasa(id, pos, b);
 	}
-
-	public void setSomaSelecionados(int somaSelecionados) {
-		this.somaSelecionados = somaSelecionados;
+	
+	public int getSomaSelecionados() throws RemoteException {
+		return fac.getSomaSelecionadas(id);
 	}
-
-	public int casaSelecionada(int pos) {
-		somaSelecionados += pos+1;
-		casas[pos] = true;
-		return somaSelecionados;
+	
+	public void zerarSomaSelecionadas () throws RemoteException {
+		fac.zerarSomaSelecionadas(id);
 	}
-
-	public int casaDeselecionada(int pos) {
-		if (casas[pos] == true) {
-			somaSelecionados -= pos+1;
-			casas[pos] = false;
-		}
-		return somaSelecionados;
+	
+	public boolean[] getSelecionadas() throws RemoteException {
+		return fac.getSelecionadas(id);
 	}
-
+	
 	public int enviaJogada() throws RemoteException {
-//		somaSelecionados = 0;
-		return fac.selecionaCasas(codigoJogador, casas);
+		return fac.enviaJogada(id);
 	}
 
 	public void encerraPartida() throws RemoteException {
-		fac.encerraPartida(codigoJogador);
+		fac.encerraPartida(id);
 	}
 
 	public int[] jogaDados() throws RemoteException {
-		return fac.jogaDados(codigoJogador);
+		return fac.jogaDados(id);
 	}
 	public int getScore() throws RemoteException {
-		int score = fac.obtemPontuacao(codigoJogador);
-		return score;
+		return fac.obtemPontuacao(id);
 	}
-
 }

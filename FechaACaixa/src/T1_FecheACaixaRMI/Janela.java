@@ -15,6 +15,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -23,13 +27,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
-@SuppressWarnings("serial")
 public class Janela extends JPanel {
+
+	private static final long serialVersionUID = 1L;
 	static JFrame frame;
 	static int somaselecionados = 0;
-	// static int dados = 2;
 	int[] dados;
-	// boolean[] botoesSelec = new boolean[9];
 	public JTextField somaSelecionados;
 	private JTextField dado1;
 	private JTextField dado2;
@@ -37,13 +40,11 @@ public class Janela extends JPanel {
 	static Random gerador = new Random();
 	static FechaACaixaClient client;
 	private JTextField subtotal;
-	private JButton btn_desistir;
+	private JButton btn_acumularPontos;
 
 	public static void main(String args[])
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException,
 			UnsupportedLookAndFeelException, MalformedURLException, RemoteException, NotBoundException {
-
-		client = new FechaACaixaClient();
 
 		for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 			if ("Windows".equals(info.getName())) {
@@ -54,12 +55,50 @@ public class Janela extends JPanel {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+
+				FileReader arq;
+				BufferedReader lerArq;
+				try {
+					arq = new FileReader("src\\T1_FecheACaixaRMI\\ip.ini");
+					lerArq = new BufferedReader(arq);	
+					client = new FechaACaixaClient(lerArq.readLine());
+					arq.close();
+				} catch (FileNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NotBoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+
+				System.out.println();
 				Object result;
 				Janela gui = new Janela();
 				gui.somaSelecionados.setText("0");
 				show(gui);
-				JanelaAux gui2 = new JanelaAux();
-				result = gui2.show();
+				result = JOptionPane.showInputDialog(null, "Insira o seu nome: ", "Nome do Jogador", 3);
+				frame.addWindowListener(new java.awt.event.WindowAdapter() {
+					@Override
+					public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+						if (JOptionPane.showConfirmDialog(frame, "Você deseja encerrar o jogo?", "Fechar realmente?",
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+							try {
+								client.encerraPartida();
+								frame.dispose();
+							} catch (RemoteException e) {
+								e.printStackTrace();
+							}
+						} else {
+							frame.setDefaultCloseOperation(0);
+						}
+					}
+				});
+
 				if (result == null) {
 					JOptionPane.showConfirmDialog(null, "Um nome deve ser informado. O jogo será encerrado.", "Erro",
 							JOptionPane.DEFAULT_OPTION);
@@ -68,7 +107,6 @@ public class Janela extends JPanel {
 					try {
 						client.setNomeJogador(result.toString());
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -78,7 +116,7 @@ public class Janela extends JPanel {
 
 	private static void show(Janela ui) {
 		frame = new JFrame();
-		frame.setTitle("T1 ... Sistemas distribuidos - Leandro Oliveira e Nathan Dal Ben");
+		frame.setTitle("T1 | Sistemas distribuidos | Leandro Oliveira e Nathan Dal Ben");
 		frame.getContentPane().setBackground(Color.white);
 		frame.setSize(614, 603);
 		frame.getContentPane().setLayout(new BorderLayout());
@@ -92,6 +130,7 @@ public class Janela extends JPanel {
 	 * Create the panel.
 	 */
 	public Janela() {
+
 		setLayout(null);
 		JLabel lblFechaACaixa = new JLabel("FECHA A CAIXA");
 		lblFechaACaixa.setBounds(10, 5, 580, 63);
@@ -108,12 +147,19 @@ public class Janela extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao1.isEnabled()) {
-					if (botao1.getForeground() == Color.red) {
-						botao1.setForeground(Color.black);
-						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(0)));
-					} else {
-						botao1.setForeground(Color.red);
-						somaSelecionados.setText(Integer.toString(client.casaSelecionada(0)));
+					try {
+						if (botao1.getForeground() == Color.red) {
+							botao1.setForeground(Color.black);
+							client.setSelecionaCasa(1, false);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						} else {
+							botao1.setForeground(Color.red);
+							client.setSelecionaCasa(1, true);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
@@ -127,12 +173,19 @@ public class Janela extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao2.isEnabled()) {
-					if (botao2.getForeground() == Color.red) {
-						botao2.setForeground(Color.black);
-						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(1)));
-					} else {
-						botao2.setForeground(Color.red);
-						somaSelecionados.setText(Integer.toString(client.casaSelecionada(1)));
+					try {
+						if (botao2.getForeground() == Color.red) {
+							botao2.setForeground(Color.black);
+							client.setSelecionaCasa(2, false);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						} else {
+							botao2.setForeground(Color.red);
+							client.setSelecionaCasa(2, true);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
@@ -147,12 +200,19 @@ public class Janela extends JPanel {
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao3.isEnabled()) {
 					if (botao3.isEnabled()) {
-						if (botao3.getForeground() == Color.red) {
-							botao3.setForeground(Color.black);
-							somaSelecionados.setText(Integer.toString(client.casaDeselecionada(2)));
-						} else {
-							botao3.setForeground(Color.red);
-							somaSelecionados.setText(Integer.toString(client.casaSelecionada(2)));
+						try {
+							if (botao3.getForeground() == Color.red) {
+								botao3.setForeground(Color.black);
+								client.setSelecionaCasa(3, false);
+								somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+							} else {
+								botao3.setForeground(Color.red);
+								client.setSelecionaCasa(3, true);
+								somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+							}
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 					}
 				}
@@ -167,12 +227,19 @@ public class Janela extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao4.isEnabled()) {
-					if (botao4.getForeground() == Color.red) {
-						botao4.setForeground(Color.black);
-						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(3)));
-					} else {
-						botao4.setForeground(Color.red);
-						somaSelecionados.setText(Integer.toString(client.casaSelecionada(3)));
+					try {
+						if (botao4.getForeground() == Color.red) {
+							botao4.setForeground(Color.black);
+							client.setSelecionaCasa(4, false);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						} else {
+							botao4.setForeground(Color.red);
+							client.setSelecionaCasa(4, true);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
@@ -186,12 +253,19 @@ public class Janela extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao5.isEnabled()) {
-					if (botao5.getForeground() == Color.red) {
-						botao5.setForeground(Color.black);
-						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(4)));
-					} else {
-						botao5.setForeground(Color.red);
-						somaSelecionados.setText(Integer.toString(client.casaSelecionada(4)));
+					try {
+						if (botao5.getForeground() == Color.red) {
+							botao5.setForeground(Color.black);
+							client.setSelecionaCasa(5, false);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						} else {
+							botao5.setForeground(Color.red);
+							client.setSelecionaCasa(5, true);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
@@ -205,12 +279,19 @@ public class Janela extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao6.isEnabled()) {
-					if (botao6.getForeground() == Color.red) {
-						botao6.setForeground(Color.black);
-						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(5)));
-					} else {
-						botao6.setForeground(Color.red);
-						somaSelecionados.setText(Integer.toString(client.casaSelecionada(5)));
+					try {
+						if (botao6.getForeground() == Color.red) {
+							botao6.setForeground(Color.black);
+							client.setSelecionaCasa(6, false);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						} else {
+							botao6.setForeground(Color.red);
+							client.setSelecionaCasa(6, true);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
@@ -224,12 +305,19 @@ public class Janela extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao7.isEnabled()) {
-					if (botao7.getForeground() == Color.red) {
-						botao7.setForeground(Color.black);
-						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(6)));
-					} else {
-						botao7.setForeground(Color.red);
-						somaSelecionados.setText(Integer.toString(client.casaSelecionada(6)));
+					try {
+						if (botao7.getForeground() == Color.red) {
+							botao7.setForeground(Color.black);
+							client.setSelecionaCasa(7, false);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						} else {
+							botao7.setForeground(Color.red);
+							client.setSelecionaCasa(7, true);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
@@ -243,13 +331,21 @@ public class Janela extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao8.isEnabled()) {
-					if (botao8.getForeground() == Color.red) {
-						botao8.setForeground(Color.black);
-						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(7)));
-					} else {
-						botao8.setForeground(Color.red);
-						somaSelecionados.setText(Integer.toString(client.casaSelecionada(7)));
+					try {
+						if (botao8.getForeground() == Color.red) {
+							botao8.setForeground(Color.black);
+							client.setSelecionaCasa(8, false);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						} else {
+							botao8.setForeground(Color.red);
+							client.setSelecionaCasa(8, true);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+
 				}
 			}
 		});
@@ -259,26 +355,36 @@ public class Janela extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (botao9.isEnabled()) {
-					if (botao9.getForeground() == Color.red) {
-						botao9.setForeground(Color.black);
-						somaSelecionados.setText(Integer.toString(client.casaDeselecionada(8)));
-					} else {
-						botao9.setForeground(Color.red);
-						somaSelecionados.setText(Integer.toString(client.casaSelecionada(8)));
+					try {
+						if (botao9.getForeground() == Color.red) {
+							botao9.setForeground(Color.black);
+							client.setSelecionaCasa(9, false);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						} else {
+							botao9.setForeground(Color.red);
+							client.setSelecionaCasa(9, true);
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+
 				}
 			}
 		});
 		botao9.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		botao9.setBounds(529, 241, 55, 93);
+
 		add(botao9);
 
-		JLabel lblTotalSelecionado = new JLabel("Total selecionado:");
+		JLabel lblTotalSelecionado = new JLabel("Total Selecionado:");
 		lblTotalSelecionado.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblTotalSelecionado.setBounds(44, 400, 179, 21);
 		add(lblTotalSelecionado);
 
 		somaSelecionados = new JTextField();
+		somaSelecionados.setEditable(false);
 		somaSelecionados.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		somaSelecionados.setHorizontalAlignment(SwingConstants.CENTER);
 		somaSelecionados.setBounds(243, 396, 66, 31);
@@ -297,97 +403,112 @@ public class Janela extends JPanel {
 					try {
 						response = client.enviaJogada();
 						if (response == 0) {
-							desabilita = client.getCasas();
+							desabilita = client.getSelecionadas();
+
 							if (desabilita[0] == true) {
-								client.casaDeselecionada(0);
+								client.setSelecionaCasa(1, false);
 								botao1.setForeground(Color.GRAY);
 								botao1.setEnabled(false);
 							}
 							if (desabilita[1] == true) {
-								client.casaDeselecionada(1);
+								client.setSelecionaCasa(2, false);
 								botao2.setForeground(Color.GRAY);
 								botao2.setEnabled(false);
 							}
 							if (desabilita[2] == true) {
-								client.casaDeselecionada(2);
+								client.setSelecionaCasa(3, false);
 								botao3.setForeground(Color.GRAY);
 								botao3.setEnabled(false);
 							}
 							if (desabilita[3] == true) {
-								client.casaDeselecionada(3);
+								client.setSelecionaCasa(4, false);
 								botao4.setForeground(Color.GRAY);
 								botao4.setEnabled(false);
 							}
 							if (desabilita[4] == true) {
-								client.casaDeselecionada(4);
+								client.setSelecionaCasa(5, false);
 								botao5.setForeground(Color.GRAY);
 								botao5.setEnabled(false);
 							}
 							if (desabilita[5] == true) {
-								client.casaDeselecionada(5);
+								client.setSelecionaCasa(6, false);
 								botao6.setForeground(Color.GRAY);
 								botao6.setEnabled(false);
 							}
 							if (desabilita[6] == true) {
-								client.casaDeselecionada(6);
+								client.setSelecionaCasa(7, false);
 								botao7.setForeground(Color.GRAY);
 								botao7.setEnabled(false);
 							}
 							if (desabilita[7] == true) {
-								client.casaDeselecionada(7);
+								client.setSelecionaCasa(8, false);
 								botao8.setForeground(Color.GRAY);
 								botao8.setEnabled(false);
 							}
 							if (desabilita[8] == true) {
-								client.casaDeselecionada(8);
+								client.setSelecionaCasa(9, false);
 								botao9.setForeground(Color.GRAY);
 								botao9.setEnabled(false);
 							}
 							dado1.setText("");
 							dado2.setText("");
-							btn_desistir.setEnabled(false);
+							btn_acumularPontos.setEnabled(false);
 							btnJogarDados.setEnabled(true);
 							btnConfirmarJogada.setEnabled(false);
-							somaSelecionados.setText(Integer.toString(client.somaSelecionados));
-							// System.out.println("Soma Selec: " +
-							// Integer.toString(client.somaSelecionados));
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
 							JOptionPane.showConfirmDialog(null, "Jogada correta.", "Confirmação",
-									JOptionPane.DEFAULT_OPTION);
+									JOptionPane.DEFAULT_OPTION, 1);
 						} else if (response == -1) {
-							if (botao1.isEnabled())
+							if (botao1.isEnabled()) {
+								client.setSelecionaCasa(1, false);
 								botao1.setForeground(Color.BLACK);
-							if (botao2.isEnabled())
-								botao2.setForeground(Color.BLACK);
-							if (botao3.isEnabled())
-								botao3.setForeground(Color.BLACK);
-							if (botao4.isEnabled())
-								botao4.setForeground(Color.BLACK);
-							if (botao5.isEnabled())
-								botao5.setForeground(Color.BLACK);
-							if (botao6.isEnabled())
-								botao6.setForeground(Color.BLACK);
-							if (botao7.isEnabled())
-								botao7.setForeground(Color.BLACK);
-							if (botao8.isEnabled())
-								botao8.setForeground(Color.BLACK);
-							if (botao9.isEnabled())
-								botao9.setForeground(Color.BLACK);
-							for (int i = 0; i < 9; i++) {
-								client.casaDeselecionada(i);
 							}
+							if (botao2.isEnabled()) {
+								client.setSelecionaCasa(2, false);
+								botao2.setForeground(Color.BLACK);
+							}
+							if (botao3.isEnabled()) {
+								client.setSelecionaCasa(3, false);
+								botao3.setForeground(Color.BLACK);
+							}
+							if (botao4.isEnabled()) {
+								client.setSelecionaCasa(4, false);
+								botao4.setForeground(Color.BLACK);
+							}
+							if (botao5.isEnabled()) {
+								client.setSelecionaCasa(5, false);
+								botao5.setForeground(Color.BLACK);
+							}
+							if (botao6.isEnabled()) {
+								client.setSelecionaCasa(6, false);
+								botao6.setForeground(Color.BLACK);
+							}
+							if (botao7.isEnabled()) {
+								client.setSelecionaCasa(7, false);
+								botao7.setForeground(Color.BLACK);
+							}
+							if (botao8.isEnabled()) {
+								client.setSelecionaCasa(8, false);
+								botao8.setForeground(Color.BLACK);
+							}
+							if (botao9.isEnabled()) {
+								client.setSelecionaCasa(9, false);
+								botao9.setForeground(Color.BLACK);
+							}
+							client.zerarSomaSelecionadas();
 							btnJogarDados.setEnabled(false);
-							somaSelecionados.setText(Integer.toString(client.somaSelecionados));
+							somaSelecionados.setText(Integer.toString(client.getSomaSelecionados()));
 							JOptionPane.showConfirmDialog(null, "Jogada incorreta.", "Confirmação",
-									JOptionPane.DEFAULT_OPTION);
+									JOptionPane.DEFAULT_OPTION, 0);
 						} else if (response == 1) {
 							JOptionPane.showConfirmDialog(null,
-									"Você concluiu o jogo com " + subtotal.getText() + " pontos. Parabéns!",
-									"Jogo concluído", JOptionPane.DEFAULT_OPTION);
+									"Você concluiu o jogo com " + subtotal.getText() + " pontos. Parabéns "
+											+ client.getNomeJogador() + "!",
+									"Jogo concluído", JOptionPane.DEFAULT_OPTION, 1);
 							client.encerraPartida();
 							frame.dispose();
 						}
 					} catch (RemoteException e2) {
-						// TODO Auto-generated catch block
 						JOptionPane.showConfirmDialog(null, "Ocorreu um erro na comunicação. Tente novamente.", "ERRO",
 								JOptionPane.DEFAULT_OPTION);
 						e2.printStackTrace();
@@ -399,6 +520,7 @@ public class Janela extends JPanel {
 		add(btnConfirmarJogada);
 
 		dado1 = new JTextField();
+		dado1.setEditable(false);
 		dado1.setHorizontalAlignment(SwingConstants.CENTER);
 		dado1.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		dado1.setBounds(100, 114, 86, 67);
@@ -416,6 +538,7 @@ public class Janela extends JPanel {
 		add(lblDado_1);
 
 		dado2 = new JTextField();
+		dado2.setEditable(false);
 		dado2.setHorizontalAlignment(SwingConstants.CENTER);
 		dado2.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		dado2.setColumns(10);
@@ -434,13 +557,12 @@ public class Janela extends JPanel {
 						if (dados[1] != 0) {
 							dado2.setText(Integer.toString(dados[1]));
 						} else {
-							dado2.setText("-");
+							dado2.setText("");
 						}
 						btnJogarDados.setEnabled(false);
 						btnConfirmarJogada.setEnabled(true);
-						btn_desistir.setEnabled(true);
+						btn_acumularPontos.setEnabled(true);
 					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -450,41 +572,41 @@ public class Janela extends JPanel {
 		btnJogarDados.setBounds(382, 115, 189, 67);
 		add(btnJogarDados);
 
-		btn_desistir = new JButton("Acumular Dados");
-		btn_desistir.setEnabled(false);
-		btn_desistir.addMouseListener(new MouseAdapter() {
+		btn_acumularPontos = new JButton("Acumular Pontos");
+		btn_acumularPontos.setEnabled(false);
+		btn_acumularPontos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (btn_desistir.isEnabled()) {
+				if (btn_acumularPontos.isEnabled()) {
 					int answer = JOptionPane.showConfirmDialog(null, "Deseja acumular o valor dos dados?",
 							"Confirmação", JOptionPane.YES_NO_OPTION);
 					if (answer == 0) {
 						try {
-
 							subtotal.setText(Integer.toString(client.getScore()));
 							dado1.setText("");
 							dado2.setText("");
+
 							btnConfirmarJogada.setEnabled(false);
 							btnJogarDados.setEnabled(true);
-							btn_desistir.setEnabled(false);
+							btn_acumularPontos.setEnabled(false);
 						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 				}
 			}
 		});
-		btn_desistir.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btn_desistir.setBounds(382, 485, 189, 67);
-		add(btn_desistir);
+		btn_acumularPontos.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btn_acumularPontos.setBounds(382, 485, 189, 67);
+		add(btn_acumularPontos);
 
-		JLabel lblSubtotalAcumulado = new JLabel("Subtotal Acumulado:");
+		JLabel lblSubtotalAcumulado = new JLabel("Pontos Acumulados:");
 		lblSubtotalAcumulado.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblSubtotalAcumulado.setBounds(44, 509, 201, 21);
 		add(lblSubtotalAcumulado);
 
 		subtotal = new JTextField();
+		subtotal.setEditable(false);
 		subtotal.setHorizontalAlignment(SwingConstants.CENTER);
 		subtotal.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		subtotal.setColumns(10);
@@ -559,6 +681,5 @@ public class Janela extends JPanel {
 		panel_7.setBorder(new LineBorder(Color.GRAY));
 		panel_7.setBounds(8, 479, 583, 78);
 		add(panel_7);
-
 	}
 }
