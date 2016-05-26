@@ -27,6 +27,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
+/**
+ * CLASSE QUE INICIALIZA A JANELA DO JOGO PARA O CLIENTE 
+ * 
+ * @author Leandro Rowedder de Oliveira
+ * @author Nathan Dal Ben Flores
+ **/
+
 public class Janela extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -60,7 +67,7 @@ public class Janela extends JPanel {
 				BufferedReader lerArq;
 				try {
 					arq = new FileReader("src\\T1_FecheACaixaRMI\\ip.ini");
-					lerArq = new BufferedReader(arq);	
+					lerArq = new BufferedReader(arq);
 					client = new FechaACaixaClient(lerArq.readLine());
 					arq.close();
 				} catch (FileNotFoundException e2) {
@@ -73,7 +80,7 @@ public class Janela extends JPanel {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 				System.out.println();
 				Object result;
 				Janela gui = new Janela();
@@ -112,20 +119,18 @@ public class Janela extends JPanel {
 		});
 	}
 
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
+	/**
+	 * Exibe uma janela inicializada anteriormente.
+	 * 
+	 * @param ui Uma janela previamente inicializada
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
+
 	private static void show(Janela ui) {
 		frame = new JFrame();
-		frame.setTitle("T1 | Sistemas distribuidos | Leandro Oliveira e Nathan Dal Ben");
+		frame.setTitle("T1 | Sistemas distribuidos | Leandro Rowedder de Oliveira e Nathan Dal Ben");
 		frame.getContentPane().setBackground(Color.white);
 		frame.setSize(614, 603);
 		frame.getContentPane().setLayout(new BorderLayout());
@@ -135,17 +140,13 @@ public class Janela extends JPanel {
 		frame.setVisible(true);
 	}
 
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
+	/**
+	 * Inicializa uma janela para o cliente com as opções de jogadas.
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
+
 	public Janela() {
 
 		setLayout(null);

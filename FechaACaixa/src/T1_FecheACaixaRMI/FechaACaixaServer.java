@@ -5,6 +5,13 @@ import java.rmi.RemoteException;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 
+/**
+ * CLASSE SERVIDOR DA COMUNICAÇÃO RMI
+ * 
+ * @author Leandro Rowedder de Oliveira
+ * @author Nathan Dal Ben Flores
+ **/
+
 public class FechaACaixaServer {
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		

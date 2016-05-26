@@ -3,6 +3,13 @@ package T1_FecheACaixaRMI;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ * CLASSE QUE INICIALIZADA POR RMI, GERENCIA AS PARTIDAS
+ * 
+ * @author Leandro Rowedder de Oliveira
+ * @author Nathan Dal Ben Flores
+ **/
+
 public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaInterface {
 
 	Jogo[] jogo;
@@ -17,23 +24,16 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 	private static final long serialVersionUID = 1L;
 	String nomeJogador;
 
-	// 1) registraJogador
-	// Recebe: string com o nome do usuário/jogador.
-	// Retorna: id (valor inteiro) do usuário (que corresponde a um número de identificação único para este
-	// usuário durante uma partida), ­1 se este usuário já está cadastrado ou ­2 se o número máximo de
-	// jogadores (ou seja, de partidas) tiver sido atingido.
+	/**
+	 * Registra uma partida nova
+	 * 
+	 * @param nome Nome do jogador da partida a ser criada
+	 * @return Retorna o ID (identificação) da partida criada
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
 
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
 	@Override
 	public int registraJogador(String nome) throws RemoteException {
 		// TODO Auto-generated method stub
@@ -47,70 +47,31 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 		return i;
 	}
 
-	// 2) encerraPartida
-	// Recebe: id do usuário (obtido através da chamada registraJogador).
-	// Retorna:  ­1 em caso  de erro ou 0 em
-	//  caso de sucesso, ou seja, a partida foi  encerrada e as
-	// informações desta partida podem ser descartadas.
+	/**
+	 * Encerra uma partida existente.
+	 * 
+	 * @param id Envia a id (identificação) da partida
+	 *            
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
 
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
 	@Override
 	public void encerraPartida(int id) throws RemoteException {
 		// TODO Auto-generated method stub
 		jogo[id] = null;
 	}
 
-	// 3) obtemTabuleiro
-	// Recebe: id do usuário (obtido através da chamada registraJogador).
-	// Retorna: string vazio em caso de erro ou string com o conteúdo das casas do tabuleiro, mostrando
-	// um dígito para casas abertas e um “_” para casas já fechadas. No início de uma partida, este método
-	// retornará sempre “123456789”. E, por exemplo, se na primeira jogada o jogador tiver obtido os
-	// valores “4” e “5” e tiver optado por aplicar a sua soma (9) respectivamente nas casas “1”, “3” e “5”
-	// (soma 9), este método retornará “_2_4_6789”. O jogo estará encerrado quando este método retornar
-	// “_________” (após o que o cliente poderá chamar os métodos obtemPontuacao e encerraPartida).
+	/**
+	 * Obtem a pontuação/score da partida
+	 * 
+	 * @param id Envia a identificação da partida que necessita de score
+	 * @return Retorna a pontuação/score da partida
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
 
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
-	@Override
-	public int obtemTabuleiro(int id) throws RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	// 4) obtemPontuacao
-	// Recebe: id do usuário (obtido através da chamada registraJogador).
-	// Retorna: valor inteiro correspondente aos pontos acumulados até o momento ou ­1 em caso de erro.
-
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
 	@Override
 	public int obtemPontuacao(int id) throws RemoteException {
 		// TODO Auto-generated method stub
@@ -118,127 +79,105 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 		return jogo[id].getScore();
 	}
 
-	// 5) jogaDados
-	// Recebe: id do usuário (obtido através da chamada registraJogador).
-	// Retorna: string vazio para erro ou string com os valores obtidos nos dados. Caso o jogador esteja na
-	// fase inicial, ainda jogando com dois dados, este string será composto por 2 dígitos. Por exemplo,
-	// “35” significa que foram lançados 2 dados e os resultados foram “3” e “5” (soma igual a 8). Ou, por
-	// exemplo, “6” que significa que as casas “7”, “8” e “9” já estão fechadas e o valor do dado lançado
-	// foi “6” (soma igual a 6). 
+	/**
+	 * Joga os dados na partida
+	 * 
+	 * @param id Envia a identificação da partida que necessita de score
+	 * @return O valor do(s) dado(s) jogado(s)
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
 
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
 	@Override
 	public int[] jogaDados(int id) throws RemoteException {
 		// TODO Auto-generated method stub
 		return jogo[id].giraDados();
 	}
 
-	// 6) selecionaCasas
-	// Recebe: id do usuário (obtido através da chamada registraJogador), string com os dígitos das casas a
-	// serem fechadas (este string pode conter de um a quatro dígitos).
-	// Retorna: 0 (seleção corretamente aplicada, ou seja, tudo certo), ­1 (identificador inválido) ou ­2 (erro
-	// na seleção).
+	/**
+	 * Envia uma jogada para ser validada.
+	 * 
+	 * @param id Envia a identificação da partida que necessita de score
+	 * @return Retorna a situação da jogada realizada
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
 
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
 	@Override
 	public int enviaJogada(int id) throws RemoteException {
 		// TODO Auto-generated method stub
 		return jogo[id].realizaJogada();
 	}
-	
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
-	public String getNomeJogador(int id) throws RemoteException{
+
+	/**
+	 * Retorna o nome do jogador da partida.
+	 * 
+	 * @param id Envia a identificação da partida que necessita de score
+	 * @return Nome do jogador da partida
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
+
+	public String getNomeJogador(int id) throws RemoteException {
 		return jogo[id].getNomeJogador();
 	}
-	
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
+
+	/**
+	 * Determina as casas selecionadas ou não.
+	 * 
+	 * @param id Envia a identificação da partida que necessita de score
+	 * @param pos Posição da casa a ser selecionada ou não
+	 * @param e True para a casa selecionada, false para a casa não-selecionada
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
+
 	public void setSelecionaCasa(int id, int pos, boolean e) {
 		jogo[id].setSelecionaCasa(pos, e);
 	}
-	
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
-	public boolean[] getSelecionadas(int id) throws RemoteException{
+
+	/**
+	 * Recebe as casas que estão selecionadas e as que não estão.
+	 * 
+	 * @param id Envia a identificação da partida que necessita de score
+	 * @return As casas que estão selecionadas e as que não estão
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
+
+	public boolean[] getSelecionadas(int id) throws RemoteException {
 		return jogo[id].getSelecionadas();
 	}
-	
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
-	public int getSomaSelecionadas(int id) throws RemoteException{
+
+	/**
+	 * Recebe a soma das casas seleciondas
+	 * 
+	 * @param id Envia a identificação da partida que necessita de score
+	 * @return A soma das casas selecionadas
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
+
+	public int getSomaSelecionadas(int id) throws RemoteException {
 		return jogo[id].getSomaSelecionadas();
 	}
-	
-	 /**
-	  * Valida um movimento de xadrez.
-	  * 
-	  * @param aColunaDe   Coluna atual da peça a ser movida
-	  * @param aLinhaDe    Linha atual da peça a ser movida
-	  * @param aColunaPara Coluna destino da peça a ser movida
-	  * @param aLinhaPara  Linha destino da peça a ser movida
-	  * @author            Leandro Oliveira
-	  * @author            Nathan Dal Ben Flores
-	  **/
-	
-	public void zerarSomaSelecionadas (int id) throws RemoteException{
+
+	/**
+	 * Zera na partida a soma das casas selecionadas
+	 * 
+	 * @param id Envia a identificação da partida que necessita de score
+	 * 
+	 * @author Leandro Rowedder de Oliveira
+	 * @author Nathan Dal Ben Flores
+	 **/
+
+	public void zerarSomaSelecionadas(int id) throws RemoteException {
 		jogo[id].zerarSomaSelecionadas();
 	}
-	
 }
