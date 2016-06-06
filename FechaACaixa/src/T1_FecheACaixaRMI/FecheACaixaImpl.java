@@ -16,7 +16,6 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 
 	protected FecheACaixaImpl() throws RemoteException {
 		super();
-		// TODO Auto-generated constructor stub
 		jogo = new Jogo[50];
 
 	}
@@ -36,15 +35,16 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 
 	@Override
 	public int registraJogador(String nome) throws RemoteException {
-		// TODO Auto-generated method stub
-		int i = 0;
-		for (i = 0; i < 50; i++) {
-			if (jogo[i] == null) {
-				jogo[i] = new Jogo(nome, i);
-				break;
+		synchronized(jogo){
+			int i = 0;
+			for (i = 0; i < 50; i++) {
+				if (jogo[i] == null) {
+					jogo[i] = new Jogo(nome, i);
+					break;
+				}
 			}
+			return i;
 		}
-		return i;
 	}
 
 	/**
@@ -58,8 +58,9 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 
 	@Override
 	public void encerraPartida(int id) throws RemoteException {
-		// TODO Auto-generated method stub
-		jogo[id] = null;
+		synchronized(jogo){
+			jogo[id] = null;
+		}
 	}
 
 	/**
@@ -74,7 +75,6 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 
 	@Override
 	public int obtemPontuacao(int id) throws RemoteException {
-		// TODO Auto-generated method stub
 		jogo[id].setScore();
 		return jogo[id].getScore();
 	}
@@ -91,7 +91,6 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 
 	@Override
 	public int[] jogaDados(int id) throws RemoteException {
-		// TODO Auto-generated method stub
 		return jogo[id].giraDados();
 	}
 
@@ -107,7 +106,6 @@ public class FecheACaixaImpl extends UnicastRemoteObject implements FecheACaixaI
 
 	@Override
 	public int enviaJogada(int id) throws RemoteException {
-		// TODO Auto-generated method stub
 		return jogo[id].realizaJogada();
 	}
 
